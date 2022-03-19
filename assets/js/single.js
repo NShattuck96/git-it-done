@@ -4,8 +4,13 @@ var repoNameEl = document.querySelector("#repo-name");
 var getRepoName = function() {
     var queryString = document.location.search;
     var repoName = queryString.split("=")[1];
-    getRepoIssues(repoName);
-    repoNameEl.textContent = repoName;
+    if(repoName) {
+      repoNameEl.textContent = repoName;
+      getRepoIssues(repoName);
+    }
+    else {
+      document.location.replace("./index.html");
+    }
   }
 
 function getRepoIssues(repo) {
@@ -14,10 +19,10 @@ function getRepoIssues(repo) {
 
 
     // make a get request to url
-    fetch(apiUrl).then(function (response) {
+    fetch(apiUrl).then(function(response) {
         // request was successful
         if (response.ok) {
-            response.json().then(function (data) {
+            response.json().then(function(data) {
                 displayIssues(data);
 
                 //check if api has paginated issues
@@ -27,8 +32,8 @@ function getRepoIssues(repo) {
             });
         }
         else {
-            console.log(response);
-            alert("There was a problem with your request!");
+          //If not successful redirect back to homepage
+          document.location.replace("./index.html");
         }
     });
 }
